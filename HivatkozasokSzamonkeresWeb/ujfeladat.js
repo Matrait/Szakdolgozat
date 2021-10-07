@@ -17,7 +17,7 @@
             $('#tarolas').click(tarolas);
         });
     };
-    //666
+
     function loadSampleData() {
         // Run a batch operation against the Word object model.
         Word.run(function (context) {
