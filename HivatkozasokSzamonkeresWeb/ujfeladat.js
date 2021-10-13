@@ -40,9 +40,15 @@
     function tarolas() {
         Word.run(function (context) {
             var range = context.document.getSelection();
-
+            var body = context.document.body;
             // Queue a command to load the range selection result.
             context.load(range, 'text');
+
+            //Pozició meghatározása
+            var start = range.startOffset;
+            var end = range.endOffset;
+
+            console.log('start:', start, 'end:', end);
 
             // Synchronize the document state by executing the queued commands
             // and return a promise to indicate task completion.
@@ -53,6 +59,8 @@
                     // Queue a command to highlight the search results.
                     range.font.highlightColor = '#FFFF00'; // Yellow
 
+                    //pozició kiírása
+                    body.insertText(start, InsertLocation.end);
                 })
                 .then(context.sync);
         })
