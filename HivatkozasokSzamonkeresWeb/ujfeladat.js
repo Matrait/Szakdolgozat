@@ -15,6 +15,7 @@
 
             // Add a click event handler for the highlight button.
             $('#tarolas').click(tarolas);
+            $('#torles').click(torles);
         });
     };
 
@@ -40,6 +41,7 @@
     function tarolas() {
         Word.run(function (context) {
             var range = context.document.getSelection();
+
             var body = context.document.body;
             // Queue a command to load the range selection result.
             context.load(range, 'text');
@@ -53,20 +55,67 @@
             // Synchronize the document state by executing the queued commands
             // and return a promise to indicate task completion.
 
+            //csak proba POST metod
+            /*var data = "{}";
+            
+            var url = "serverURL";
+            var xhr = new XMLHttpRequest();
+
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({data}))*/
+
             return context.sync()
                 .then(function () {
                     context.load(range, 'font');
                     // Queue a command to highlight the search results.
                     range.font.highlightColor = '#FFFF00'; // Yellow
 
+                   // body.insertText(start, end);
+
+                    //Contetnt Control hozzáadás
+                    var rangAfter = range.getRange("End");
+
+                    var wordCC = rangAfter.insertContentControl();
+
+                    
+                    wordCC.tag = "CC1";
+                    wordCC.insertText(" ", 'Replace');
+                    wordCC.appearance = 'Hidden';
+                    wordCC.font.highlightColor = 'red';
+
+                    
+                   
+                   
                     //pozició kiírása
-                    body.insertText(start, InsertLocation.end);
+                    
+                })
+                .then(context.sync);
+        })
+            .catch(errorHandler);
+
+        // var ccid = wordCC.id;
+
+    }
+
+    function tarolas() {
+        Word.run(function (context) {
+            var range = context.document.getSelection();
+
+            // Queue a command to load the range selection result.
+            context.load(range, 'text');
+
+            return context.sync()
+                .then(function () {
+                    context.load(range, 'font');
+                    // gomb teszt
+                    range.font.highlightColor = 'green';
+
                 })
                 .then(context.sync);
         })
             .catch(errorHandler);
     }
-
 
 
     function displaySelectedText() {
