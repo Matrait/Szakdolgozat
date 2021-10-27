@@ -98,7 +98,7 @@
 
     }
 
-    function tarolas() {
+    function torles() {
         Word.run(function (context) {
             var range = context.document.getSelection();
 
