@@ -14,7 +14,7 @@
 
             loadSampleData();
 
-            $('betoltes').click(betoltes);
+            $('#betoltes').click(betoltes);
         });
     };
 
