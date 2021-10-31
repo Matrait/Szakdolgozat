@@ -44,11 +44,20 @@
             // Queue a command to load the range selection result.
             context.load(range, 'text');
 
+            var helyes = "helyes";
+
             return context.sync()
                 .then(function () {
                     context.load(range, 'font');
                     // gomb teszt
                     range.font.highlightColor = 'green';
+
+                    var rangeAfter = range.getRange("End");
+
+                    var javCC = rangeAfter.insertContentControl();
+
+                    javCC.insertText(helyes, 'Replace');
+                    javCC.font.highlightColor = 'yellow';
 
                 })
                 .then(context.sync);

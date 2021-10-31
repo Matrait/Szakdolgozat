@@ -2,6 +2,7 @@
     "use strict";
 
     var messageBanner;
+    var count = 0;
 
     // The initialize function must be run each time a new page is loaded.
     Office.initialize = function (reason) {
@@ -39,84 +40,65 @@
     }
 
     function tarolas() {
+        //használandó változók
+        var data;
+        var szoveg;
+        var ccTag;
+        var dokNev = document.getElementById("dokNev").value;
         Word.run(function (context) {
             var range = context.document.getSelection();
 
-            var body = context.document.body;
+            
             // Queue a command to load the range selection result.
             context.load(range, 'text');
 
-            //Pozició meghatározása
-            var start = range.startOffset;
-            var end = range.endOffset;
-
-            console.log('start:', start, 'end:', end);
-
-            // Synchronize the document state by executing the queued commands
-            // and return a promise to indicate task completion.
-
-            //csak proba POST metod
-            /*var data = "{}";
-            
-            var url = "serverURL";
-            var xhr = new XMLHttpRequest();
-
-            xhr.open("POST", url, true);
-            xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify({data}))*/
 
             return context.sync()
                 .then(function () {
                     context.load(range, 'font');
-                    // Queue a command to highlight the search results.
-                    range.font.highlightColor = '#FFFF00'; // Yellow
-
-                   // body.insertText(start, end);
+                    context.load(range, 'text');
 
                     //Contetnt Control hozzáadás
-                    var rangAfter = range.getRange("End");
-
-                    var wordCC = rangAfter.insertContentControl();
+                    var jelCC = range.insertContentControl();
 
                     
-                    wordCC.tag = "CC1";
-                    wordCC.insertText(" ", 'Replace');
-                    wordCC.appearance = 'Hidden';
-                    wordCC.font.highlightColor = 'red';
+                    jelCC.tag = count;
+                    jelCC.font.highlightColor = 'Red';
 
+                    szoveg = range.text;
+                    ccTag = jelCC.tag;
                     
-                   
-                   
-                    //pozició kiírása
+                    // adat csomagolás
+                    data = "{DocName : ".concat(dokNev, ", Text : ", szoveg, ", CCtag : ", ccTag);
+                    sender(data);
+
+                    //CC változó növelése
+                    count++;
+
                     
                 })
                 .then(context.sync);
+            
         })
             .catch(errorHandler);
-
-        // var ccid = wordCC.id;
 
     }
 
     function torles() {
-        Word.run(function (context) {
-            var range = context.document.getSelection();
-
-            // Queue a command to load the range selection result.
-            context.load(range, 'text');
-
-            return context.sync()
-                .then(function () {
-                    context.load(range, 'font');
-                    // gomb teszt
-                    range.font.highlightColor = 'green';
-
-                })
-                .then(context.sync);
-        })
-            .catch(errorHandler);
+        data = "{DeleteLast : True}";
     }
 
+    function sender(data) {
+        //csak proba POST metod
+
+
+        var url = "serverURL";
+        var xhr = new XMLHttpRequest();
+
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        xhr.send(JSON.stringify({ data }));
+    }
 
     function displaySelectedText() {
         Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
