@@ -49,8 +49,7 @@
             return context.sync()
                 .then(function () {
                     context.load(range, 'font');
-                    // gomb teszt
-                    range.font.highlightColor = 'green';
+                    // CC beillesztés a hibák után
 
                     var rangeAfter = range.getRange("End");
 

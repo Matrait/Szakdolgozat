@@ -69,7 +69,7 @@
                     ccTag = jelCC.tag;
                     
                     // adat csomagolás
-                    data = "{DocName : ".concat(dokNev, ", Text : ", szoveg, ", CCtag : ", ccTag);
+                    data = "{DocName : ".concat(dokNev, ", Text : ", szoveg, ", CCtag : ", ccTag, "}");
                     sender(data);
 
                     //CC változó növelése
@@ -91,13 +91,29 @@
     function sender(data) {
         //csak proba POST metod
 
-
-        var url = "serverURL";
+        /*var url = "http://127.0.0.1:8080/ujfeladat.php";
         var xhr = new XMLHttpRequest();
 
         xhr.open("POST", url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify({ data }));
+        xhr.send(JSON.stringify({ data }));*/
+
+
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:8080/ujfeladat.php",
+            dataType: "json",
+            contentType: "application/json",
+            data: JSON.stringify(data),
+            success: function () {
+
+            },
+            
+        });
+        /*$.post(
+            "http://127.0.0.1:8080/ujfeladat.php",
+            data
+        );*/
     }
 
     function displaySelectedText() {
