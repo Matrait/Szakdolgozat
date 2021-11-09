@@ -69,8 +69,8 @@
                     ccTag = jelCC.tag;
                     
                     // adat csomagolás
-                    data = "{DocName : ".concat(dokNev, ", Text : ", szoveg, ", CCtag : ", ccTag, "}");
-                    sender(data);
+                    data = {"DocName" : dokNev,  "Text" : szoveg, "CCtag" : ccTag};
+                    //sender(data);
 
                     //CC változó növelése
                     count++;
@@ -85,7 +85,13 @@
     }
 
     function torles() {
-        data = "{DeleteLast : True}";
+        var dokNev = document.getElementById("dokNev").value;
+        data = { "DokNev": dokNev, "DeleteLast": True };
+        //sender(data);
+        $.post(
+            'http://127.0.0.1:8080/test.php', { "DokNev": dokNev, "DeleteLast": True }, function () { $('#siker').html('Adat sikeresen rögzítve'); }
+        );
+        data = { "DokNev": dokNev, "DeleteLast": True };
     }
 
     function sender(data) {
@@ -99,21 +105,20 @@
         xhr.send(JSON.stringify({ data }));*/
 
 
-        $.ajax({
-            type: "POST",
+        /*$.ajax({
+            type: "GET",
             url: "http://127.0.0.1:8080/ujfeladat.php",
-            dataType: "json",
+            dataType: "html",
             contentType: "application/json",
             data: JSON.stringify(data),
             success: function () {
-
+                $('#siker').html('Adat rögzítve');
             },
             
-        });
-        /*$.post(
-            "http://127.0.0.1:8080/ujfeladat.php",
-            data
-        );*/
+        });*/
+        $.post(
+            'http://127.0.0.1:8080/test.php', data, function () { $('#siker').html('Adat sikeresen rögzítve');}
+        );
     }
 
     function displaySelectedText() {
