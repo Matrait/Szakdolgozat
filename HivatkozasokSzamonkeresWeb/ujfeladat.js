@@ -1,4 +1,6 @@
-﻿(function () {
+﻿//const { error } = require("jquery");
+
+(function () {
     "use strict";
 
     var messageBanner;
@@ -60,7 +62,6 @@
 
                     //Contetnt Control hozzáadás
                     var jelCC = range.insertContentControl();
-
                     
                     jelCC.tag = count;
                     jelCC.font.highlightColor = 'Red';
@@ -69,13 +70,11 @@
                     ccTag = jelCC.tag;
                     
                     // adat csomagolás
-                    data = {"DocName" : dokNev,  "Text" : szoveg, "CCtag" : ccTag};
-                    //sender(data);
+                    data = '{"DocName": "'+ dokNev +', "Text": "'+ szoveg +'", "CCtag": '+ ccTag + '}';
+                    sender(data);
 
                     //CC változó növelése
                     count++;
-
-                    
                 })
                 .then(context.sync);
             
@@ -86,12 +85,24 @@
 
     function torles() {
         var dokNev = document.getElementById("dokNev").value;
-        data = { "DokNev": dokNev, "DeleteLast": True };
-        //sender(data);
-        $.post(
-            'http://127.0.0.1:8080/test.php', { "DokNev": dokNev, "DeleteLast": True }, function () { $('#siker').html('Adat sikeresen rögzítve'); }
-        );
-        data = { "DokNev": dokNev, "DeleteLast": True };
+        var data = '{ "DokNev": "' + dokNev + '", "DeleteLast": true }';
+        $('#siker').html(' ');
+        //ez igy müködik
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:8080/deleteLast.php",
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            mimeType: 'multipart/form-data',
+            success: function() {
+                $('#siker').html('siker');
+            },
+
+        }).fail((jqXHR, error) => {
+            $('#siker').html(new Error(error), "  ", new Error(jqXHR));
+        });
     }
 
     function sender(data) {
@@ -103,22 +114,27 @@
         xhr.open("POST", url, true);
         xhr.setRequestHeader('Content-Type', 'application/json');
         xhr.send(JSON.stringify({ data }));*/
+        $('#siker').html(' ');
 
-
-        /*$.ajax({
-            type: "GET",
+        $.ajax({
+            type: "POST",
             url: "http://127.0.0.1:8080/ujfeladat.php",
-            dataType: "html",
-            contentType: "application/json",
-            data: JSON.stringify(data),
+            data: data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            mimeType:'multipart/form-data',
             success: function () {
                 $('#siker').html('Adat rögzítve');
             },
             
-        });*/
-        $.post(
+        }).fail((jqXHR, error) => {
+            $('#siker').html(new Error(error), "  ", new Error(jqXHR));
+        });
+
+        /*$.post(
             'http://127.0.0.1:8080/test.php', data, function () { $('#siker').html('Adat sikeresen rögzítve');}
-        );
+        );*/
     }
 
     function displaySelectedText() {
