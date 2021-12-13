@@ -80,7 +80,7 @@
     <Content Include="Functions\FunctionFile.js" />
     <Content Include="Home.css" />
     <Content Include="Home.html" />
-    <Content Include="Home.js" />
+    <Content Include="javitas.js" />
     <Content Include="Images\AddinIcon.png" />
     <Content Include="Images\Button16x16.png" />
     <Content Include="Images\Button32x32.png" />
