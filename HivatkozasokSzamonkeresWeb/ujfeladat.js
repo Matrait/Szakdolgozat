@@ -45,42 +45,37 @@
         //használandó változók
         var data;
         var szoveg;
-        var ccTag;
+        var ccId;
         var dokNev = document.getElementById("dokNev").value;
-        Word.run(function (context) {
-            var range = context.document.getSelection();
+        newErr();
 
-            
-            // Queue a command to load the range selection result.
-            context.load(range, 'text');
+        async function newErr() {
+            //Ez igy jó
+            await Word.run(async (context) => {
+                var range = context.document.getSelection();
+                context.load(range, 'text');
+                await context.sync();
 
+                
+                let wordCC = range.insertContentControl();
+                wordCC.font.highlightColor = 'Red';
+                wordCC.appearance = 'BoundingBox';
+                szoveg = range.text;
 
-            return context.sync()
-                .then(function () {
-                    context.load(range, 'font');
-                    context.load(range, 'text');
+                await context.sync();
 
-                    //Contetnt Control hozzáadás
-                    var jelCC = range.insertContentControl();
-                    
-                    jelCC.tag = count;
-                    jelCC.font.highlightColor = 'Red';
+                let ccs = context.document.contentControls;
+                ccs.load();
 
-                    szoveg = range.text;
-                    ccTag = jelCC.tag;
-                    
-                    // adat csomagolás
-                    data = '{"DocName": "'+ dokNev +', "Text": "'+ szoveg +'", "CCtag": '+ ccTag + '}';
-                    sender(data);
+                await context.sync();
 
-                    //CC változó növelése
-                    count++;
-                })
-                .then(context.sync);
-            
-        })
-            .catch(errorHandler);
-
+                var amount = ccs.items.length;
+                ccId = ccs.items[amount-1].id;
+                data = '{"DocName" : "' + dokNev + '", "Text" : "' + szoveg + '", "CCtag" : ' + ccId + '}';
+                sender(data);                
+            });
+        }
+        
     }
 
     function torles() {
@@ -106,14 +101,8 @@
     }
 
     function sender(data) {
-        //csak proba POST metod
+        //Ez igy müködik
 
-        /*var url = "http://127.0.0.1:8080/ujfeladat.php";
-        var xhr = new XMLHttpRequest();
-
-        xhr.open("POST", url, true);
-        xhr.setRequestHeader('Content-Type', 'application/json');
-        xhr.send(JSON.stringify({ data }));*/
         $('#siker').html(' ');
 
         $.ajax({
@@ -132,9 +121,6 @@
             $('#siker').html(new Error(error), "  ", new Error(jqXHR));
         });
 
-        /*$.post(
-            'http://127.0.0.1:8080/test.php', data, function () { $('#siker').html('Adat sikeresen rögzítve');}
-        );*/
     }
 
     function displaySelectedText() {
