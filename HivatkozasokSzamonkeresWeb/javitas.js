@@ -3,7 +3,7 @@
     "use strict";
 
     var messageBanner;
-
+   
     // The initialize function must be run each time a new page is loaded.
     Office.initialize = function (reason) {
         $(document).ready(function () {
@@ -12,71 +12,91 @@
             messageBanner = new components.MessageBanner(element);
             messageBanner.hideBanner();
 
-            loadSampleData();
+            loadDocNames();
 
             $('#betoltes').click(betoltes);
         });
     };
 
-    function loadSampleData() {
-        // Run a batch operation against the Word object model.
-        Word.run(function (context) {
-            // Create a proxy object for the document body.
-            var body = context.document.body;
+    function loadDocNames() {
+        //ez igy jó lesz
+        var data = '{ "submit": "True"}';
 
-            // Queue a commmand to clear the contents of the body.
-            body.clear();
-            // Queue a command to insert text into the end of the Word document body.
-            body.insertText(
-                "This is a sample text inserted in the document",
-                Word.InsertLocation.end);
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:8080/loadDocNames.php",
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            mimeType: 'multipart/form-data',
+            success: function (result) {
+                $('#dokNevLG').html(result);
+            },
 
-            // Synchronize the document state by executing the queued commands, and return a promise to indicate task completion.
-            return context.sync();
-        })
-        .catch(errorHandler);
+        }).fail((jqXHR, error) => {
+            $('#dokNevLG').html(new Error(error), "  ", new Error(jqXHR));
+        });
     }
 
     function betoltes() {
-        Word.run(function (context) {
-            var range = context.document.getSelection();
+        var selectId = document.getElementById("dokNevLGS").value;
+        var data = '{ "DocId": "' + selectId + '"}';
 
-            // Queue a command to load the range selection result.
-            context.load(range, 'text');
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:8080/visszaToltes.php",
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            mimeType: 'multipart/form-data',
+            success: function (result) {
+                const json = result;
+                
+                const obj = JSON.parse(json);
+                
+                beiras(obj);
+            },
 
-            var helyes = "helyes";
-
-            return context.sync()
-                .then(function () {
-                    context.load(range, 'font');
-                    // CC beillesztés a hibák után
-
-                    var rangeAfter = range.getRange("End");
-
-                    var javCC = rangeAfter.insertContentControl();
-
-                    javCC.insertText(helyes, 'Replace');
-                    javCC.font.highlightColor = 'yellow';
-
-                })
-                .then(context.sync);
-
-        })
-        .catch(errorHandler);
+        }).fail((jqXHR, error) => {
+            $('#dokNevLG').html(new Error(error), "  ", new Error(jqXHR));
+        });
     } 
 
+    function beiras(obj) {//valami a sync-ekkel nem jó, getbyid után
+        var hibaszam = obj.length;
+        betolt();
+        async function betolt(){
+            await Word.run(async (context) => {
+                let ccs = context.document.contentControls;
+                ccs.load();
+                await context.sync();
 
-    function displaySelectedText() {
-        Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
-            function (result) {
-                if (result.status === Office.AsyncResultStatus.Succeeded) {
-                    showNotification('The selected text is:', '"' + result.value + '"');
-                } else {
-                    showNotification('Error:', result.error.message);
+                var amount = ccs.items.length;
+                var ccId = ccs.items[amount - 1].id;
+
+                for (var i = 0; i < hibaszam; i++) {
+                    var ccId = obj[i].ccId;
+                    var wordCC = ccs.getByIdOrNullObject(parseInt(ccId));
+                    
+                    wordCC.font.highlightColor = '#FFFF00';
+                    await context.sync();
+
+                    let range = wordCC.getRange();
+                    let answerR = range.getRange('After');
+                    let answerCC = answerR.insertContentControl();
+                    await context.sync();
+                    answerCC.font.highlightColor = '#00FF00';
+
+                    answerCC.load();
+                    answerCC.insertText(obj[i].text,'Replace');
                 }
+                await context.sync();
             });
+        }
+        
     }
-
     //$$(Helper function for treating errors, $loc_script_taskpane_home_js_comment34$)$$
     function errorHandler(error) {
         // $$(Always be sure to catch any accumulated errors that bubble up from the Word.run execution., $loc_script_taskpane_home_js_comment35$)$$
