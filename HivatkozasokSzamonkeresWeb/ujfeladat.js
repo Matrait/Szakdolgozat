@@ -4,7 +4,7 @@
     "use strict";
 
     var messageBanner;
-    var count = 0;
+    
 
     // The initialize function must be run each time a new page is loaded.
     Office.initialize = function (reason) {
@@ -14,32 +14,15 @@
             messageBanner = new components.MessageBanner(element);
             messageBanner.hideBanner();
 
-            loadSampleData();
-
             // Add a click event handler for the highlight button.
             $('#tarolas').click(tarolas);
             $('#torles').click(torles);
+
+            $('#tarolas').click(saved);
+            $('#torles').click(saved);
+            $('#dokNev').change(saved);
         });
     };
-
-    function loadSampleData() {
-        // Run a batch operation against the Word object model.
-        Word.run(function (context) {
-            // Create a proxy object for the document body.
-            var body = context.document.body;
-
-            // Queue a commmand to clear the contents of the body.
-            body.clear();
-            // Queue a command to insert text into the end of the Word document body.
-            body.insertText(
-                "This is a sample text inserted in the document",
-                Word.InsertLocation.end);
-
-            // Synchronize the document state by executing the queued commands, and return a promise to indicate task completion.
-            return context.sync();
-        })
-            .catch(errorHandler);
-    }
 
     function tarolas() {
         //használandó változók
@@ -122,18 +105,26 @@
         });
 
     }
+    function saved() {
+        var dokNev = document.getElementById("dokNev").value;
 
-    function displaySelectedText() {
-        Office.context.document.getSelectedDataAsync(Office.CoercionType.Text,
-            function (result) {
-                if (result.status === Office.AsyncResultStatus.Succeeded) {
-                    showNotification('The selected text is:', '"' + result.value + '"');
-                } else {
-                    showNotification('Error:', result.error.message);
-                }
-            });
+        var data = '{ "Request" : "True", "DokNev" : "' + dokNev + '" }';
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:8080/saved.php",
+            data: data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            mimeType: 'multipart/form-data',
+            success: function (result) {
+                $('#tarolt').html(result);
+            },
+
+        }).fail((jqXHR, error) => {
+            $('#tarolt').html(new Error(error), "  ", new Error(jqXHR));
+        });
     }
-
     //$$(Helper function for treating errors, $loc_script_taskpane_home_js_comment34$)$$
     function errorHandler(error) {
         // $$(Always be sure to catch any accumulated errors that bubble up from the Word.run execution., $loc_script_taskpane_home_js_comment35$)$$
