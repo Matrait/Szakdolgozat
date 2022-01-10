@@ -64,7 +64,8 @@
         });
     } 
 
-    function beiras(obj) {//valami a sync-ekkel nem jó, getbyid után
+    function beiras(obj) {
+        //ez igy müködik
         var hibaszam = obj.length;
         betolt();
         async function betolt(){

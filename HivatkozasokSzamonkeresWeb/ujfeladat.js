@@ -42,7 +42,7 @@
                 
                 let wordCC = range.insertContentControl();
                 wordCC.font.highlightColor = 'Red';
-                wordCC.appearance = 'BoundingBox';
+                wordCC.appearance = 'Hidden';
                 szoveg = range.text;
 
                 await context.sync();
