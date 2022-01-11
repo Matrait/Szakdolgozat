@@ -19,13 +19,28 @@ body {
     padding: 15px;
 }
 
-a.gomb {
+div.button {
+    position: relative;
+    width: 33%;
+    display: inline;
     padding: 5px;
     border-style: solid;
     border-color: black;
     border-width: 1px;
     text-decoration: none;
+    word-wrap: break-word;
     background-color: lightblue;
+}
+div.buttonactive {
+    width: 33%;
+    display: inline;
+    padding: 5px;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    text-decoration: none;
+    word-wrap: break-word;
+    background-color: yellow;
 }
 
 #notification-popup.MessageBanner {

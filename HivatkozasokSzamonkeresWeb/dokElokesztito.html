@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Új feladatlap készítés</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+
+    <script src="Scripts/jquery-3.5.0.js" type="text/javascript"></script>
+    <script src="Scripts/MessageBanner.js" type="text/javascript"></script>
+    <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script src="dokElo.js" type="text/javascript"></script>
+    <link href="Home.css" rel="stylesheet" type="text/css" />
+</head>
+<body class="ms-Fabric" dir="ltr">
+    <div id="content-main">
+        <div>
+            <div class="buttonactive">
+                <a href="dokElokesztito.html">Dokumentum előkészítése</a>
+            </div>
+            <div class="button">
+                <a href="hibamentes.html">Hibák elhelyzése</a>
+            </div>
+            <div class="button">
+                <a href="Home.html">Főoldal</a>
+            </div>
+        </div>
+
+        <div class="padding">
+            <p><label>Dokumentum neve: <input type="text" id="docName" name="docName" /></label></p>
+            <p>Eddig tárolt hivatkozások:<i id="tarolt">0</i></p>
+            <p><button id="save_C" name="save_C">Hivatkozás rögzítése</button></p>
+            <p><button id="deletelast" name="deletelast">Előző rögzítés törlése</button></p>
+
+            <p><button id="save_S" name="save_S">Rögzített hivatkozások mentése</button><span id="saveDone"></span></p>
+        </div>
+    </div>
+
+    <div class="footer">
+
+    </div>
+
+    <!-- Component used for displaying notifications -->
+    <!-- Ha nem használjuk a végén a massagebannert akkor ezt a részt törölni kell -->
+    <div class="MessageBanner" id="notification-popup">
+        <div class="MessageBanner-content">
+            <div class="MessageBanner-text">
+                <div class="MessageBanner-clipper">
+                    <div class="ms-font-m-plus ms-fontWeight-semibold" id="notification-header"></div>
+                    <div class="ms-font-m ms-fontWeight-semilight" id="notification-body"></div>
+                </div>
+            </div>
+            <button class="MessageBanner-expand" style="display:none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
+            <div class="MessageBanner-action"></div>
+        </div>
+        <button class="MessageBanner-close"> <i class="ms-Icon ms-Icon--ChromeClose"></i> </button>
+    </div>
+</body>
+</html>

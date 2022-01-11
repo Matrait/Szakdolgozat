@@ -76,6 +76,7 @@
     <Content Include="Content\fabric.css" />
     <Content Include="Content\fabric.min.css" />
     <Content Include="Content\MessageBanner.css" />
+    <Content Include="hibaMentes.js" />
     <Content Include="Functions\FunctionFile.html" />
     <Content Include="Functions\FunctionFile.js" />
     <Content Include="Home.css" />
@@ -565,8 +566,9 @@
     <Content Include="Scripts\Office\metadata\endpoints.xml" />
     <Content Include="Scripts\Office\metadata\features.xml" />
     <Content Include="Scripts\Office\MicrosoftAjax.js" />
-    <Content Include="ujfeladat.html" />
-    <Content Include="ujfeladat.js" />
+    <Content Include="hibamentes.html" />
+    <Content Include="dokElokesztito.html" />
+    <Content Include="dokElo.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
