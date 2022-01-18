@@ -15,6 +15,8 @@
             $('#save_C').click(saveOnClient);
             $('#deletelast').click(deleteLast);
             $('#save_S').click(sender);
+            $('#docName').change(nameCheck);
+
         });
     };
 
@@ -89,23 +91,46 @@
         var json = JSON.stringify(jsonData);
         counter = 0;
 
-        $('#siker').html(' ');
+        $('#saveDone').html(' ');
 
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:8080/ujfeladat.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/v2/dokelo.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,
             processData: false,
             mimeType:'multipart/form-data',
             success: function () {
-                $('#siker').html('Adat rögzítve');
+                $('#saveDone').html('Hivatkozások helye rögzítve');
             },
             
         }).fail((jqXHR, error) => {
-            $('#siker').html(new Error(error), "  ", new Error(jqXHR));
+            $('#saveDone').html(new Error(error), "  ", new Error(jqXHR));
         });
 
+    }
+
+    function nameCheck() {
+        var docName = document.getElementById("docName").value;
+        var data = new Object();
+        data.DocName = docName;
+        var json = JSON.stringify(data);
+
+        $.ajax({
+            type: "POST",
+            url: "http://127.0.0.1:8080/v2/reset.php", //ide kell majd írni az aktuális php-t
+            data: json,
+            contentType: false,
+            cache: false,
+            processData: false,
+            mimeType: 'multipart/form-data',
+            success: function (result) {
+                $('#docNameCheck').html(result);
+            },
+
+        }).fail((jqXHR, error) => {
+            $('#docNameCheck').html(new Error(error), "  ", new Error(jqXHR));
+        });
     }
 })();
