@@ -111,7 +111,7 @@
             await Word.run(async (context) => {
                 let ccs = context.document.contentControls;
                 ccs.load();
-
+                
                 await context.sync();
 
                 var amount = ccs.items.length;
@@ -185,7 +185,7 @@
 
                 for (var i = 0; i < CCcount; i++) {
                     var ccID = obj[i].ccId;
-                    var wordCC = ccs.getByIdOrNullObject(parseInt(ccid));
+                    var wordCC = ccs.getByIdOrNullObject(parseInt(ccID));
 
                     wordCC.font.highlightColor = 'gray';
                     wordCC.appearance = 'BoundingBox';

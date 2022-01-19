@@ -2,85 +2,176 @@
 (function () {
     "use strict";
 
-    var messageBanner;
-
     // The initialize function must be run each time a new page is loaded.
     Office.initialize = function (reason) {
         $(document).ready(function () {
-            // Initialize the notification mechanism and hide it
-            var element = document.querySelector('.MessageBanner');
-            messageBanner = new components.MessageBanner(element);
-            messageBanner.hideBanner();
+            Office.onReady();
 
-            loadSampleData();
+            dropDownListDN();
 
+            // Add a click event handler for the highlight button.
             $('#betoltes').click(betoltes);
+            $('#docNames').change(dropDownListFS); //a click nem lesz jó
         });
     };
 
-    function loadSampleData() {
-        // Run a batch operation against the Word object model.
-        Word.run(function (context) {
-            // Create a proxy object for the document body.
-            var body = context.document.body;
+    function dropDownListDN() {
+        //dokumentum nevek legördülő listája
+        $('#docNames').html(' ');
+        var data = '{"docNames": true}';
 
-            // Queue a commmand to clear the contents of the body.
-            body.clear();
-            // Queue a command to insert text into the end of the Word document body.
-            body.insertText(
-                "This is a sample text inserted in the document",
-                Word.InsertLocation.end);
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/v2/docNamesDD.php", //ide kell majd írni az aktuális php-t
+            data: data,
+            contentType: false,
+            cache: false,
+            processData: false,
+            mimeType: 'multipart/form-data',
+            success: function (result) {
+                $('#docNames').html(result);
+            },
 
-            // Synchronize the document state by executing the queued commands, and return a promise to indicate task completion.
-            return context.sync();
-        })
-        .catch(errorHandler);
+        }).fail((jqXHR, error) => {
+            $('#docNames').html(new Error(error), "  ", new Error(jqXHR));
+        });
+
+    }
+    function dropDownListFS() {
+        //feladat sor legördülő listája
+        var docID = document.getElementById("docNamesDD").value;
+        var data = new Object();
+        data.DocID = docID;
+        data.submit = true;
+        var json = JSON.stringify(data);
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/v2/feladatSorNamesDD.php", //ide kell majd írni az aktuális php-t
+            data: json,
+            contentType: false,
+            cache: false,
+            processData: false,
+            mimeType: 'multipart/form-data',
+            success: function (result) {
+                $('#feladatSorNames').html(result);
+            },
+
+        }).fail((jqXHR, error) => {
+            $('#feladatSorNames').html(new Error(error), "  ", new Error(jqXHR));
+        });
+
     }
 
     function betoltes() {
-        Word.run(function (context) {
-            var range = context.document.getSelection();
+        //kiválasztott adatok JSON formázása
+        var docID = document.getElementById("docNamesDD").value;
+        var fsID = document.getElementById("feladatSorDD").value;
+        var data = new Object();
+        data.DocID = docID;
+        data.FSID = fsID;
+        var json = JSON.stringify(data);
 
-            // Queue a command to load the range selection result.
-            context.load(range, 'text');
+        //request küldése
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/v2/visszaToltes2.php", //ide kell majd írni az aktuális php-t
+            data: json,
+            contentType: false,
+            cache: false,
+            processData: false,
+            mimeType: 'multipart/form-data',
+            success: function (result) {
+                const obj = JSON.parse(result);
+                findErrors(obj);
+                showOrigin();
+            },
 
-            var helyes = "helyes";
+        }).fail((jqXHR, error) => {
+            $('#javitasDone').html(new Error(error), "  ", new Error(jqXHR));
+        });
+        //hibás CC kijelőlése helyes szöveg mögéírása
+        async function findErrors(obj) {
+            await Word.run(async (context) => {
+                let ccs = context.document.contentControls;
+                ccs.load();
+                
+                await context.sync();
 
-            return context.sync()
-                .then(function () {
-                    context.load(range, 'font');
-                    // CC beillesztés a hibák után
+                for (var i = 0; i < obj.length; i++) {
+                    var ccID = obj[i].ccID;
+                    var text = obj[i].text;
+                    var wordCC = ccs.getByIdOrNullObject(parseInt(ccID));
+                    wordCC.load();
+                    
+                    await context.sync();
+                    var wText = wordCC.text;
+                    
+                    if (wText != text) { //szöveg összehasonlítása
+                        wordCC.font.highlightColor = 'red';
+                        wordCC.appearance = "BoundingBox"; //szín és megjelenés váltás
 
-                    var rangeAfter = range.getRange("End");
+                        await context.sync();
 
-                    var javCC = rangeAfter.insertContentControl();
+                        let range = wordCC.getRange();
+                        let correctR = range.getRange('After');
+                        let correctCC = correctR.insertContentControl();//új cc beszúrása
 
-                    javCC.insertText(helyes, 'Replace');
-                    javCC.font.highlightColor = 'yellow';
+                        await context.sync();
 
-                })
-                .then(context.sync);
+                        correctCC.font.highlightColor = "green";
 
-        })
-        .catch(errorHandler);
+                        correctCC.load();
+                        correctCC.insertText(obj[i].text, 'Replace');//helyes szöveg beszúrása
+                    }
+                }
+
+            });
+        }
+        function showOrigin() {
+            //kiválasztott adatok JSON formázása
+            var docID = document.getElementById("docNamesDD").value;
+            var fsID = document.getElementById("feladatSorDD").value;
+            var data = new Object();
+            data.DocID = docID;
+            data.FSID = fsID;
+            var json = JSON.stringify(data);
+            //request küldése
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:8080/v2/showOrigin.php", //ide kell majd írni az aktuális php-t
+                data: json,
+                contentType: false,
+                cache: false,
+                processData: false,
+                mimeType: 'multipart/form-data',
+                success: function (result) {
+                    findOrigin(result);
+                },
+
+            }).fail((jqXHR, error) => {
+                $('#javitasDone').html(new Error(error), "  ", new Error(jqXHR));
+            });
+            //eredeti feladatok megjelőlése
+            async function findOrigin(json) {
+                await Word.run(async (context) => {
+                    let ccs = context.document.contentControls;
+                    ccs.load();
+                    const obj = JSON.parse(json);
+                    await context.sync();
+
+                    for (var i = 0; i < obj.length; i++) {
+                        var ccID = obj[i].ccID;
+                        var wordCC = ccs.getByIdOrNullObject(parseInt(ccID));
+
+                        await context.sync();
+
+                        wordCC.font.highlightColor = 'yellow';
+                    }
+
+                });
+            }
+        }
     } 
 
-
-    //$$(Helper function for treating errors, $loc_script_taskpane_home_js_comment34$)$$
-    function errorHandler(error) {
-        // $$(Always be sure to catch any accumulated errors that bubble up from the Word.run execution., $loc_script_taskpane_home_js_comment35$)$$
-        showNotification("Error:", error);
-        console.log("Error: " + error);
-        if (error instanceof OfficeExtension.Error) {
-            console.log("Debug info: " + JSON.stringify(error.debugInfo));
-        }
-    }
-
-    // Helper function for displaying notifications
-    function showNotification(header, content) {
-        $("#notification-header").text(header);
-        $("#notification-body").text(content);
-        messageBanner.showBanner();
-        messageBanner.toggleExpansion();
-    }
 })();
