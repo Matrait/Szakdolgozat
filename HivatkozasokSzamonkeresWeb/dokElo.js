@@ -64,6 +64,7 @@
         popped = jsonData.Text.pop();
         popped = jsonData.CCid.pop();
         $('#tarolt').html(jsonData.CCid.length);
+        counter = counter - 1;
         deleteLast()
 
         async function deleteLast() {

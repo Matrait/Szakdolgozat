@@ -15,13 +15,12 @@
 </head>
 <body class="ms-Fabric" dir="ltr">
     <div id="content-main">
-        <div class="padding">
-            <div class="buttonactive">
-                <a href=#>Javítás</a>
-            </div>
-            <div class="button">
-                <a href="Home.html">Főoldal</a>
-            </div>
+        <div class="menu">
+            <ul>
+                <li class="button"><a href="#" class="button">Javítás</a></li>
+                <li class="buttonP"><a href="Home.html" class="buttonP">Főoldal</a></li>
+
+            </ul>
         </div>
         <div class="padding">
             <p><label>Dokumentum neve:<span id="docNames"></span></label></p>
@@ -32,26 +31,7 @@
     </div>
 
     <div class="footer">
-        <div class="ms-Grid ms-bgColor-themeSecondary">
-            <div class="ms-Grid-row">
-                <div class="ms-Grid-col ms-u-sm12 ms-u-md12 ms-u-lg12"> <div class="ms-font-xl ms-fontColor-white">Contoso</div></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Component used for displaying notifications -->
-    <div class="MessageBanner" id="notification-popup">
-        <div class="MessageBanner-content">
-            <div class="MessageBanner-text">
-                <div class="MessageBanner-clipper">
-                    <div class="ms-font-m-plus ms-fontWeight-semibold" id="notification-header"></div>
-                    <div class="ms-font-m ms-fontWeight-semilight" id="notification-body"></div>
-                </div>
-            </div>
-            <button class="MessageBanner-expand" style="display:none"><i class="ms-Icon ms-Icon--chevronsDown"></i> </button>
-            <div class="MessageBanner-action"></div>
-        </div>
-        <button class="MessageBanner-close"> <i class="ms-Icon ms-Icon--ChromeClose"></i> </button>
+       
     </div>
 </body>
 </html>

@@ -80,7 +80,8 @@
     function deleteLast_chose() {
         let popped = jsonData.DocName.pop();
         popped = jsonData.FeladatSorName.pop();
-        popped = jsonData.CCid.pop();
+        let poppedID = jsonData.CCid.pop();
+        counter = counter - 1;
         deleteLast()
 
         async function deleteLast() {
@@ -90,9 +91,7 @@
 
                 await context.sync();
 
-                var amount = ccs.items.length;
-                var ccID = ccs.items[amount - 1].id;
-                var wordCC = ccs.getByIdOrNullObject(ccID);
+                var wordCC = ccs.getByIdOrNullObject(poppedID);
 
                 wordCC.font.highlightColor = 'gray';
             });
