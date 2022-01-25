@@ -1,1 +1,1 @@
-<?php $notification = array('check_date'=>'20220120','date'=>'20211231','status'=>'1','link'=>'https://warehouse.easyphp.org/inventory-devserver?s=not20211231','message'=>'NEW MODULE : Laravel 8.77.1 & Laravel Manager 1.1','link_text'=>'DOWNLOAD'); ?>
+<?php $notification = array('check_date'=>'20220125','date'=>'20220125','status'=>'1','link'=>'https://warehouse.easyphp.org/inventory-devserver?s=not20220125','message'=>'NEW COMPONENT : PHP 8.0.15 with Xdebug 3.1.2','link_text'=>'DOWNLOAD'); ?>

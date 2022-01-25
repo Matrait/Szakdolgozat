@@ -18,13 +18,14 @@
             $('#deletelast_Chose').click(deleteLast_chose);
             $('#chose_S').click(sender_chose);
             $('#reset').click(resetSend);
-
+            $('#choseDone').html(' ');
         });
     };
     function dropDownList() {
         //ez müködik
         $('#ddlist').html(' ');
         var data = '{"ddList": true}';
+        $('#choseDone').html(' ');
 
         $.ajax({
             type: "POST",
@@ -81,6 +82,7 @@
         let popped = jsonData.DocName.pop();
         popped = jsonData.FeladatSorName.pop();
         let poppedID = jsonData.CCid.pop();
+        $('#tarolt').html(jsonData.CCid.length);
         counter = counter - 1;
         deleteLast()
 
@@ -94,6 +96,7 @@
                 var wordCC = ccs.getByIdOrNullObject(poppedID);
 
                 wordCC.font.highlightColor = 'gray';
+                
             });
         }
     }
@@ -104,6 +107,13 @@
         counter = 0;
 
         $('#choseDone').html(' ');
+
+        jsonData.DocName.length = 0;
+        jsonData.FeladatSorName.length = 0;
+        jsonData.CCid.length = 0;
+
+        $('#tarolt').html(jsonData.CCid.length);
+
         hideCCs();
 
         async function hideCCs() {
@@ -151,6 +161,7 @@
         var data = new Object();
         data.DocName = docName;
         var json = JSON.stringify(data);
+        $('#choseDone').html(' ');
 
         $.ajax({
             type: "POST",
