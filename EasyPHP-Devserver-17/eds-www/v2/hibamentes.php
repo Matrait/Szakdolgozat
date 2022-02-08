@@ -20,7 +20,7 @@ for ($i=0; $i < $lenght; $i++) {
     $row_cnt = mysqli_num_rows($result);
     if ($row_cnt == 1) {
         $row = mysqli_fetch_assoc($result);
-        $docID = (int)$row['ID'];//eddig jó
+        $docID = (int)$row['ID'];
         
         $dumy = $feladatSorName[0][$i];
         $query = "SELECT * FROM docverzions WHERE vName = '$dumy' and DocID ='$docID'";

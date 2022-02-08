@@ -79,8 +79,9 @@
     <Content Include="hibaMentes.js" />
     <Content Include="Functions\FunctionFile.html" />
     <Content Include="Functions\FunctionFile.js" />
-    <Content Include="Home.css" />
     <Content Include="Home.html" />
+    <Content Include="Home.css" />
+    <Content Include="HomeAPW.html" />
     <Content Include="javitas.js" />
     <Content Include="Images\AddinIcon.png" />
     <Content Include="Images\Button16x16.png" />

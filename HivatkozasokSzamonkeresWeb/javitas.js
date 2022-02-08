@@ -165,8 +165,10 @@
                         var wordCC = ccs.getByIdOrNullObject(parseInt(ccID));
 
                         await context.sync();
-
-                        wordCC.font.highlightColor = 'yellow';
+                        //NEM MÜKÖDIK IGY
+                        if (wordCC.font.highlightColor != 'red') {
+                            wordCC.font.highlightColor = 'green';
+                        }
                     }
 
                 });
