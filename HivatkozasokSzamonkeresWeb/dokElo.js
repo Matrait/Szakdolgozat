@@ -1,6 +1,6 @@
 ﻿(function () {
     "use strict";
-    var jsonData = new Object();//ebben tároljuk az adatokat küldées elött
+    var jsonData = new Object();//ebben tároljuk az adatokat küldés elött
     jsonData.DocName = new Array();
     jsonData.Text = new Array();
     jsonData.CCid = new Array();
@@ -13,7 +13,7 @@
         $(document).ready(function () {
             // Add a click event handler for the highlight button.
             $('#save_C').click(saveOnClient);
-            $('#deletelast').click(deleteLast);
+            $('#delete').click(deleteSelected);
             $('#save_S').click(sender);
             $('#docName').change(nameCheck);
 
@@ -21,7 +21,7 @@
     };
 
     function saveOnClient() {
-        
+        $('#deleteDone').html('');
         var text;
         var ccId;
         var docName = document.getElementById("docName").value;
@@ -37,17 +37,13 @@
                 let wordCC = range.insertContentControl();
                 wordCC.font.highlightColor = 'gray';
                 wordCC.appearance = 'BoundingBox';
-                text = range.text;
+
+                wordCC.load();
 
                 await context.sync();
 
-                let ccs = context.document.contentControls;
-                ccs.load();
-
-                await context.sync();
-
-                var amount = ccs.items.length;
-                ccId = ccs.items[amount - 1].id;
+                text = wordCC.text;
+                ccId = wordCC.id;
                                
                 jsonData.DocName[counter] = docName;
                 jsonData.Text[counter] = text;
@@ -59,44 +55,66 @@
         
     }
 
-    function deleteLast() {
-        let popped = jsonData.DocName.pop();
-        popped = jsonData.Text.pop();
-        popped = jsonData.CCid.pop();
-        $('#tarolt').html(jsonData.CCid.length);
-        counter = counter - 1;
-        deleteLast()
-
-        async function deleteLast() {
+    function deleteSelected() {
+        var ccID;
+        $('#deleteDone').html('');
+        findSelectedCC();
+        async function findSelectedCC() {
             await Word.run(async (context) => {
-                let ccs = context.document.contentControls;
-                ccs.load();
+                let range = context.document.getSelection();
+                range.load();
 
                 await context.sync();
 
-                var amount = ccs.items.length;
-                var ccID = ccs.items[amount - 1].id;
-                var wordCC = ccs.getByIdOrNullObject(ccID);
+                let wordCC = range.parentContentControlOrNullObject;
+                wordCC.load();
+
+                await context.sync();
+
+                ccID = wordCC.id;
+                if (typeof ccID == 'undefined') {
+                    $('#deleteDone').html('A kiválasztott hivatkozás nem található');
+                    return;
+                }
+
+                for (var i = 0; i < jsonData.CCid.length; i++) {
+                    if (jsonData.CCid[i] === ccID) {
+
+                        jsonData.DocName.splice(i, 1);
+                        jsonData.Text.splice(i, 1);
+                        jsonData.CCid.splice(i, 1);
+
+                    }
+                }
 
                 wordCC.font.highlightColor = null;
 
                 await context.sync();
 
                 wordCC.delete(true);
+
+                $('#tarolt').html(jsonData.CCid.length);
+                counter = counter - 1;
             });
         }
     }
 
     function sender() {
-        
+        $('#deleteDone').html('');
+
         var json = JSON.stringify(jsonData);
+
+        jsonData.DocName.length = 0;
+        jsonData.Text.length = 0;
+        jsonData.CCid.length = 0;
+
         counter = 0;
 
         $('#saveDone').html(' ');
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/v2/dokelo.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/edsa-gited/v3/dokelo.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,
@@ -120,7 +138,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:8080/v2/reset.php", //ide kell majd írni az aktuális php-t
+            url: "http://127.0.0.1:8080/edsa-gited/v3/docNameCheck.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,

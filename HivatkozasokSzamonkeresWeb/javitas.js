@@ -22,7 +22,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/v2/docNamesDD.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/edsa-gited/v3/docNamesDD.php", //ide kell majd írni az aktuális php-t
             data: data,
             contentType: false,
             cache: false,
@@ -47,7 +47,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/v2/feladatSorNamesDD.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/edsa-gited/v3/feladatSorNamesDD.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,
@@ -75,7 +75,7 @@
         //request küldése
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/v2/visszaToltes2.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/edsa-gited/v3/visszaToltes2.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,
@@ -119,7 +119,7 @@
 
                         await context.sync();
 
-                        correctCC.font.highlightColor = "green";
+                        correctCC.font.highlightColor = "yellow";
 
                         correctCC.load();
                         correctCC.insertText(obj[i].text, 'Replace');//helyes szöveg beszúrása
@@ -139,7 +139,7 @@
             //request küldése
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8080/v2/showOrigin.php", //ide kell majd írni az aktuális php-t
+                url: "http://localhost:8080/edsa-gited/v3/showOrigin.php", //ide kell majd írni az aktuális php-t
                 data: json,
                 contentType: false,
                 cache: false,
@@ -165,10 +165,8 @@
                         var wordCC = ccs.getByIdOrNullObject(parseInt(ccID));
 
                         await context.sync();
-                        //NEM MÜKÖDIK IGY
-                        if (wordCC.font.highlightColor != 'red') {
-                            wordCC.font.highlightColor = 'green';
-                        }
+                        
+                        wordCC.font.highlightColor = "green";
                     }
 
                 });

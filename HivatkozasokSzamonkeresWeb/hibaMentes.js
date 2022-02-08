@@ -1,6 +1,6 @@
 ﻿(function () {
     "use strict";
-    var jsonData = new Object();//ebben tároljuk az adatokat küldées elött
+    var jsonData = new Object();//ebben tároljuk az adatokat küldés elött
     jsonData.DocName = new Array();
     jsonData.FeladatSorName = new Array();
     jsonData.CCid = new Array();
@@ -15,7 +15,7 @@
 
             // Add a click event handler for the highlight button.
             $('#chose_C').click(choseOnClient);
-            $('#deletelast_Chose').click(deleteLast_chose);
+            $('#deletelast_Chose').click(deleteSelected_chose);
             $('#chose_S').click(sender_chose);
             $('#reset').click(resetSend);
             $('#choseDone').html(' ');
@@ -29,7 +29,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/v2/loadDDList.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/edsa-gited/v3/loadDDList.php", //ide kell majd írni az aktuális php-t
             data: data,
             contentType: false,
             cache: false,
@@ -44,7 +44,8 @@
         });
     }
     function choseOnClient() {
-        
+        $('#deleteDone').html('');
+
         var ccId;
         var docName = document.getElementById("docNamesDDL").value;
         var feladatSorName = document.getElementById("feladatSorName").value;
@@ -78,25 +79,42 @@
         
     }
 
-    function deleteLast_chose() {
-        let popped = jsonData.DocName.pop();
-        popped = jsonData.FeladatSorName.pop();
-        let poppedID = jsonData.CCid.pop();
-        $('#tarolt').html(jsonData.CCid.length);
-        counter = counter - 1;
-        deleteLast()
-
-        async function deleteLast() {
+    function deleteSelected_chose() {
+        var ccID;
+        $('#deleteDone').html('');
+        findSelectedCC();
+        async function findSelectedCC() {
             await Word.run(async (context) => {
-                let ccs = context.document.contentControls;
-                ccs.load();
+                let range = context.document.getSelection();
+                range.load();
 
                 await context.sync();
 
-                var wordCC = ccs.getByIdOrNullObject(poppedID);
+                let wordCC = range.parentContentControlOrNullObject;
+                wordCC.load();
 
-                wordCC.font.highlightColor = 'gray';
-                
+                await context.sync();
+
+                ccID = wordCC.id;
+                if (typeof ccID == 'undefined') {
+                    $('#deleteDone').html('A kiválasztott hivatkozás nem található');
+                    return;
+                }
+
+                for (var i = 0; i < jsonData.CCid.length; i++) {
+                    if (jsonData.CCid[i] === ccID) {
+
+                        jsonData.DocName.splice(i, 1);
+                        jsonData.FeladatSorName.splice(i, 1);
+                        jsonData.CCid.splice(i, 1);
+
+                    }
+                }
+
+                wordCC.font.highlightColor = "gray";
+
+                $('#tarolt').html(jsonData.CCid.length);
+                counter = counter - 1;
             });
         }
     }
@@ -106,6 +124,7 @@
         var json = JSON.stringify(jsonData);
         counter = 0;
 
+        $('#deleteDone').html('');
         $('#choseDone').html(' ');
 
         jsonData.DocName.length = 0;
@@ -141,7 +160,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:8080/v2/hibamentes.php", //ide kell majd írni az aktuális php-t
+            url: "http://127.0.0.1:8080/edsa-gited/v3/hibamentes.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,
@@ -161,11 +180,13 @@
         var data = new Object();
         data.DocName = docName;
         var json = JSON.stringify(data);
+
+        $('#deleteDone').html('');
         $('#choseDone').html(' ');
 
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:8080/v2/reset.php", //ide kell majd írni az aktuális php-t
+            url: "http://127.0.0.1:8080/edsa-gited/v3/reset.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,
