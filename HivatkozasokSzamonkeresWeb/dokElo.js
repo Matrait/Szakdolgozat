@@ -46,7 +46,7 @@
                 ccId = wordCC.id;
                                
                 jsonData.DocName[counter] = docName;
-                jsonData.Text[counter] = text;
+                jsonData.Text[counter] = encodeURIComponent(text);
                 jsonData.CCid[counter] = ccId;
                 $('#tarolt').html(jsonData.CCid.length);
                 counter++;
@@ -114,14 +114,14 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/edsa-gited/v3/dokelo.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/v3/dokelo.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,
             processData: false,
             mimeType:'multipart/form-data',
-            success: function () {
-                $('#saveDone').html('Hivatkozások helye rögzítve');
+            success: function (result) {
+                $('#saveDone').html(result);
             },
             
         }).fail((jqXHR, error) => {
@@ -131,6 +131,7 @@
     }
 
     function nameCheck() {
+        //ez müködik
         var docName = document.getElementById("docName").value;
         var data = new Object();
         data.DocName = docName;
@@ -138,7 +139,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:8080/edsa-gited/v3/docNameCheck.php", //ide kell majd írni az aktuális php-t
+            url: "http://127.0.0.1:8080/v3/docNameCheck.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,

@@ -1,1 +1,0 @@
-<?php $notification = array('check_date'=>'20220126','date'=>'20220126','status'=>'1','link'=>'https://warehouse.easyphp.org/inventory-devserver?s=not20220126','message'=>'NEW COMPONENT & MODULE : WordPress 5.9 + PHP 8.1.2 and 8.0.15 with Xdebug 3.1.2','link_text'=>'DOWNLOAD'); ?>

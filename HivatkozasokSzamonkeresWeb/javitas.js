@@ -22,7 +22,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/edsa-gited/v3/docNamesDD.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/v3/docNamesDD.php", //ide kell majd írni az aktuális php-t
             data: data,
             contentType: false,
             cache: false,
@@ -47,7 +47,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/edsa-gited/v3/feladatSorNamesDD.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/v3/feladatSorNamesDD.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,
@@ -75,7 +75,7 @@
         //request küldése
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/edsa-gited/v3/visszaToltes2.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/v3/visszaToltes2.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,
@@ -100,7 +100,7 @@
 
                 for (var i = 0; i < obj.length; i++) {
                     var ccID = obj[i].ccID;
-                    var text = obj[i].text;
+                    var text = decodeURIComponent(obj[i].text);
                     var wordCC = ccs.getByIdOrNullObject(parseInt(ccID));
                     wordCC.load();
                     
@@ -122,7 +122,7 @@
                         correctCC.font.highlightColor = "yellow";
 
                         correctCC.load();
-                        correctCC.insertText(obj[i].text, 'Replace');//helyes szöveg beszúrása
+                        correctCC.insertText(decodeURIComponent(obj[i].text), 'Replace');//helyes szöveg beszúrása
                     }
                 }
 
@@ -139,7 +139,7 @@
             //request küldése
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8080/edsa-gited/v3/showOrigin.php", //ide kell majd írni az aktuális php-t
+                url: "http://localhost:8080/v3/showOrigin.php", //ide kell majd írni az aktuális php-t
                 data: json,
                 contentType: false,
                 cache: false,
@@ -166,7 +166,7 @@
 
                         await context.sync();
                         
-                        wordCC.font.highlightColor = "green";
+                        wordCC.font.highlightColor = "lime";
                     }
 
                 });

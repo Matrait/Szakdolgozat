@@ -36,7 +36,7 @@
     <Host Name="Document" />
   </Hosts>
   <DefaultSettings>
-    <SourceLocation DefaultValue="~remoteAppUrl/Home.html" />
+    <SourceLocation DefaultValue="https://127.0.0.1:8080/edsa-gited/HivatkozasokSzamonkereseWeb/home.html" />
   </DefaultSettings>
   <!-- End TaskPane Mode integration.  -->
 

@@ -29,7 +29,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/edsa-gited/v3/loadDDList.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/v3/loadDDList.php", //ide kell majd írni az aktuális php-t
             data: data,
             contentType: false,
             cache: false,
@@ -120,7 +120,7 @@
     }
 
     function sender_chose() {
-        //ez nem jó
+        
         var json = JSON.stringify(jsonData);
         counter = 0;
 
@@ -160,14 +160,14 @@
 
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:8080/edsa-gited/v3/hibamentes.php", //ide kell majd írni az aktuális php-t
+            url: "http://127.0.0.1:8080/v3/hibamentes.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,
             processData: false,
             mimeType:'multipart/form-data',
-            success: function () {
-                $('#choseDone').html('Adat rögzítve');
+            success: function (result) {
+                $('#choseDone').html(result);
             },
             
         }).fail((jqXHR, error) => {
@@ -186,7 +186,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://127.0.0.1:8080/edsa-gited/v3/reset.php", //ide kell majd írni az aktuális php-t
+            url: "http://127.0.0.1:8080/v3/reset.php", //ide kell majd írni az aktuális php-t
             data: json,
             contentType: false,
             cache: false,
@@ -223,7 +223,7 @@
 
                     await context.sync();
 
-                    wordCC.insertText(obj[i].text, 'Replace');
+                    wordCC.insertText(decodeURIComponent(obj[i].text), 'Replace');
                 }
             })
         }
