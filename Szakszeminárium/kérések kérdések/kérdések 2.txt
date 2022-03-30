@@ -1,0 +1,36 @@
+Keretrendszer bemutatásnál mit érdemes forrásnak megjelőlni?
+
+ha ilyen egyszerü a dolog akkor nem nagyon van pedagogiai hatás kell-e arról beszélni?
+
+
+
+követelményeket átbeszéljük vagy én találom ki?
+
+mennyit szabad a kódot magyarázni?
+
+ilyen egyszerü dolognál lehet e felhasználő felület optimalizálásról beszélni?
+
+elég-e egy ilyen egyszerü set up vagy bolyolítani kell?
+
+
+
+
+mit kell initialize-álni, mit csinál?
+Gombok meghívása?
+$('#tarolas').click(tarolas); ennyi?
+
+Hogyan kell szerverhez kapcsolodni? Easy php szerver jó vagy milyen kell?
+
+Range kijelőlt szöveg
+ Word.run(function (context) { (mi ez a sor?)
+var range = context.document.getSelection();
+
+ebből hogyan lesz pozicióm ha lehet belőle?
+
+
+sok random file mire kell, kell-e?
+
+
+most ezt a VS futatja hogyan lesz saját szerveren?
+
+

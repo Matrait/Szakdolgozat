@@ -1,0 +1,8 @@
+
+Követelmények:
+Funkciók:
+
+UI:
+
+Le kell e forditani az ábrákat?
+	magyar legyen

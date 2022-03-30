@@ -1,0 +1,24 @@
+DONE  doc eló kijelőlt törlés 
+
+lehet e ujat hozzáadni később
+
+NOT POSSIBLE cc focus alapján mentés
+
+mentésnél lekérdezés
+
+tárolt eljárást
+
+php sql 1 insert legyen, gyorsabb
+	kell egy stresz test
+
+plugin főoldal jelszó adatbázis jelszóval
+
+IGY MEGCSINÁLNI NAGYON NAGY ÁTSZERVEZÉSSEL JÁR, CSAK AKKOR HA BIZTOS IGY LEGYEN szinek átgondolása 
+	feladat volt és helyes -> zöld
+	feladat volt és nem jó -> piros, zöld
+	nem volt feladat de rossz -> piros, sárga
+	
+	Mostani
+	feladat volt és helyes -> zöld
+	feladat volt és nem jó -> zöld, piros
+	nem volt feladat de rossz -> sárga, piros

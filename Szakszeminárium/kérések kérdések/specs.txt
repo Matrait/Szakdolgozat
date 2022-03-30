@@ -1,0 +1,5 @@
+reset gomb
+
+kész feladathoz dok nev
+
+összes lehetséges hiba helyének tárolása, és azok közül aktuális hibák kiválasztása
