@@ -1,0 +1,14 @@
+﻿{
+	"DocName": [
+		"TestDocName",
+		"TestDocName"
+	],
+	"Text": [
+		"TestText1",
+		"TestText2"
+	],
+	"CCid": [
+		#testCCid1,
+		#testCCid2
+	]
+}

@@ -89,6 +89,7 @@
     <Content Include="Images\Button80x80.png" />
     <Content Include="Images\Close.png" />
     <Content Include="javitas.html" />
+    <None Include="json.json" />
     <Content Include="Scripts\jquery-3.5.0.js" />
     <Content Include="Scripts\jquery-3.5.0.min.js" />
     <Content Include="Scripts\jquery-3.5.0.slim.js" />

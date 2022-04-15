@@ -114,7 +114,7 @@
 
         $.ajax({
             type: "POST",
-            url: "http://localhost:8080/v3/dokelo.php", //ide kell majd írni az aktuális php-t
+            url: "http://localhost:8080/v3/dokelo.php",
             data: json,
             contentType: false,
             cache: false,
